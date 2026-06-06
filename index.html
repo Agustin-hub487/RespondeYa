@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RespondeYA — Tu asistente de WhatsApp 24/7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #2563EB;
+    --blue-dark: #1E40AF;
+    --blue-light: #3B82F6;
+    --blue-pale: #EFF6FF;
+    --blue-mid: #DBEAFE;
+    --text: #0F172A;
+    --text-mid: #475569;
+    --text-light: #94A3B8;
+    --bg: #FFFFFF;
+    --bg-soft: #F8FAFC;
+    --border: #E2E8F0;
+    --green: #10B981;
+    --r: 10px;
+    --r-lg: 18px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .display {
+    font-family: 'Syne', sans-serif;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--blue);
+    text-decoration: none;
+    letter-spacing: -0.03em;
+  }
+
+  .logo span { color: var(--text); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  nav ul a {
+    text-decoration: none;
+    color: var(--text-mid);
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+
+  nav ul a:hover { color: var(--blue); }
+
+  .nav-cta {
+    background: var(--blue);
+    color: white !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500 !important;
+  }
+
+  .nav-cta:hover { background: var(--blue-dark); color: white !important; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.75rem;
+    border-radius: var(--r);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+    box-shadow: 0 1px 3px rgba(37,99,235,0.3), 0 4px 12px rgba(37,99,235,0.2);
+  }
+
+  .btn-primary:hover {
+    background: var(--blue-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-mid);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    background: var(--bg-soft);
+    color: var(--text);
+  }
+
+  .btn-outline-white {
+    background: transparent;
+    color: white;
+    border: 1.5px solid rgba(255,255,255,0.5);
+  }
+
+  .btn-outline-white:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: white;
+  }
+
+  .btn-lg {
+    padding: 1rem 2.25rem;
+    font-size: 1.1rem;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 7rem 2rem 5rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 700px;
+    background: radial-gradient(ellipse at center, rgba(37,99,235,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--blue-pale);
+    border: 1px solid var(--blue-mid);
+    color: var(--blue);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.75rem;
+  }
+
+  .hero-eyebrow .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    max-width: 760px;
+    margin: 0 auto 1.5rem;
+    color: var(--text);
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--blue);
+    position: relative;
+  }
+
+  .hero h1 em::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue-light), var(--blue));
+    border-radius: 2px;
+  }
+
+  .hero-sub {
+    font-size: 1.2rem;
+    color: var(--text-mid);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .trust-badges {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    color: var(--text-light);
+    font-size: 0.85rem;
+  }
+
+  .trust-badges span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .trust-badges .check {
+    color: var(--green);
+    font-size: 1rem;
+  }
+
+  /* MOCKUP */
+  .hero-mockup {
+    margin: 4rem auto 0;
+    max-width: 900px;
+    position: relative;
+  }
+
+  .mockup-browser {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .browser-bar {
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .dot-r { width: 10px; height: 10px; border-radius: 50%; background: #FC5F57; }
+  .dot-y { width: 10px; height: 10px; border-radius: 50%; background: #FDBE35; }
+  .dot-g { width: 10px; height: 10px; border-radius: 50%; background: #2BC840; }
+
+  .browser-url {
+    flex: 1;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    text-align: center;
+    margin: 0 1rem;
+  }
+
+  .dashboard-preview {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    height: 420px;
+  }
+
+  .sidebar {
+    background: var(--bg-soft);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+  }
+
+  .sidebar-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--blue);
+    margin-bottom: 2rem;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+  }
+
+  .sidebar-item.active {
+    background: var(--blue-pale);
+    color: var(--blue);
+    font-weight: 500;
+  }
+
+  .sidebar-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.7;
+  }
+
+  .dashboard-main {
+    padding: 1.5rem;
+    overflow: hidden;
+  }
+
+  .dash-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .stat-value.blue { color: var(--blue); }
+  .stat-value.green { color: var(--green); }
+
+  .chart-area {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chart-label {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 130px;
+  }
+
+  .bar {
+    flex: 1;
+    background: var(--blue-mid);
+    border-radius: 4px 4px 0 0;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .bar.highlight { background: var(--blue); }
+
+  .bar-label {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.62rem;
+    color: var(--text-light);
+    white-space: nowrap;
+  }
+
+  /* SECTION BASE */
+  section { padding: 6rem 2rem; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    color: var(--text);
+  }
+
+  .section-sub {
+    font-size: 1.1rem;
+    color: var(--text-mid);
+    max-width: 560px;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  .center { text-align: center; }
+  .center .section-sub { margin-left: auto; margin-right: auto; }
+
+  /* STATS STRIP */
+  .stats-strip {
+    background: var(--blue);
+    padding: 4rem 2rem;
+  }
+
+  .stats-strip .container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .strip-stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .strip-stat-label {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  /* BENEFITS */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .benefit-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.75rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .benefit-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+  }
+
+  .benefit-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--blue-pale);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .benefit-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .benefit-card p {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* STEPS */
+  .steps-section { background: var(--bg-soft); }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3.5rem;
+    position: relative;
+  }
+
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 44px;
+    left: calc(100% / 6);
+    right: calc(100% / 6);
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue-mid), var(--blue));
+    pointer-events: none;
+  }
+
+  .step {
+    text-align: center;
+    position: relative;
+  }
+
+  .step-num {
+    width: 52px;
+    height: 52px;
+    background: var(--blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin: 0 auto 1.25rem;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 6px var(--blue-pale);
+  }
+
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+
+  .step p {
+    font-size: 0.92rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  /* FOR WHOM */
+  .whom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .whom-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .whom-card:hover {
+    border-color: var(--blue-light);
+    transform: translateY(-2px);
+  }
+
+  .whom-emoji {
+    font-size: 1.75rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .whom-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .whom-card p {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  /* PRICING */
+  .pricing-section { background: var(--bg-soft); }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+    align-items: start;
+  }
+
+  .plan-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 2rem;
+    position: relative;
+    transition: transform 0.2s;
+  }
+
+  .plan-card:hover { transform: translateY(-3px); }
+
+  .plan-card.featured {
+    border: 2px solid var(--blue);
+    box-shadow: 0 8px 32px rgba(37,99,235,0.12);
+  }
+
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--blue);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.85rem;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .plan-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .plan-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .plan-price sup {
+    font-size: 1.25rem;
+    vertical-align: top;
+    margin-top: 0.5rem;
+    display: inline-block;
+  }
+
+  .plan-period {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+  }
+
+  .plan-desc {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    line-height: 1.4;
+  }
+
+  .plan-features li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .plan-cta {
+    display: block;
+    text-align: center;
+    padding: 0.85rem;
+    border-radius: var(--r);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    background: transparent;
+  }
+
+  .plan-cta:hover {
+    background: var(--blue);
+    color: white;
+  }
+
+  .plan-card.featured .plan-cta {
+    background: var(--blue);
+    color: white;
+  }
+
+  .plan-card.featured .plan-cta:hover {
+    background: var(--blue-dark);
+  }
+
+  /* TESTIMONIALS */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .testimonial-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .stars {
+    color: #F59E0B;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+  }
+
+  .testimonial-text {
+    font-size: 0.97rem;
+    color: var(--text);
+    line-height: 1.65;
+    font-style: italic;
+    flex: 1;
+  }
+
+  .testimonial-author {
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .author-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+  }
+
+  .author-biz {
+    font-size: 0.8rem;
+    color: var(--text-light);
+  }
+
+  /* FAQ */
+  .faq-section { background: var(--bg-soft); }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .faq-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+
+  .faq-q {
+    padding: 1.25rem 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .faq-q:hover { background: var(--bg-soft); }
+
+  .faq-q .arrow {
+    flex-shrink: 0;
+    color: var(--blue);
+    transition: transform 0.2s;
+    font-size: 1.2rem;
+  }
+
+  .faq-item.open .faq-q .arrow { transform: rotate(45deg); }
+
+  .faq-a {
+    display: none;
+    padding: 0 1.5rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.65;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .faq-item.open .faq-a { display: block; }
+
+  /* CTA FINAL */
+  .cta-final {
+    background: var(--blue);
+    padding: 7rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-final::before {
+    content: '';
+    position: absolute;
+    top: -150px;
+    right: -150px;
+    width: 500px;
+    height: 500px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .cta-final::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 400px;
+    height: 400px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .cta-final h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: white;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-final p {
+    color: rgba(255,255,255,0.8);
+    font-size: 1.15rem;
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-white {
+    background: white;
+    color: var(--blue);
+    font-weight: 600;
+  }
+
+  .btn-white:hover {
+    background: rgba(255,255,255,0.92);
+    transform: translateY(-1px);
+  }
+
+  .cta-note {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.85rem;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--text);
+    color: rgba(255,255,255,0.6);
+    padding: 4rem 2rem 2rem;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-brand-logo span { color: #60A5FA; }
+
+  .footer-desc {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul a {
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s;
+  }
+  .footer-col ul a:hover { color: white; }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.82rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .benefits-grid, .steps-grid, .whom-grid, .pricing-grid, .testimonials-grid { grid-template-columns: 1fr; }
+    .faq-grid { grid-template-columns: 1fr; }
+    .stats-strip .container { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .dashboard-preview { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    nav ul { display: none; }
+    .steps-grid::before { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .footer-top { grid-template-columns: 1fr; }
+    .hero { padding: 5rem 1.25rem 3rem; }
+    section { padding: 4rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Responde<span>YA</span></a>
+  <ul>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="#" class="nav-cta">Prueba gratis</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <div class="dot"></div>
+    Más de 500 negocios ya responden 24/7
+  </div>
+  <h1>Tu asistente de WhatsApp disponible <em>24/7</em></h1>
+  <p class="hero-sub">Responde automáticamente a tus clientes y no pierdas ninguna venta. Configúralo en minutos, sin conocimientos técnicos.</p>
+  <div class="hero-btns">
+    <a href="#" class="btn btn-primary btn-lg">Prueba gratis 14 días →</a>
+    <a href="#como-funciona" class="btn btn-ghost btn-lg">Ver cómo funciona</a>
+  </div>
+  <div class="trust-badges">
+    <span><span class="check">✓</span> Sin tarjeta de crédito</span>
+    <span><span class="check">✓</span> Cancelación inmediata</span>
+    <span><span class="check">✓</span> Soporte en español</span>
+  </div>
+
+  <!-- DASHBOARD MOCKUP -->
+  <div class="hero-mockup">
+    <div class="mockup-browser">
+      <div class="browser-bar">
+        <div class="dot-r"></div>
+        <div class="dot-y"></div>
+        <div class="dot-g"></div>
+        <div class="browser-url">app.respondeya.es/dashboard</div>
+      </div>
+      <div class="dashboard-preview">
+        <div class="sidebar">
+          <div class="sidebar-logo">RespondeYA</div>
+          <div class="sidebar-item active">📊 Dashboard</div>
+          <div class="sidebar-item">💬 Mensajes</div>
+          <div class="sidebar-item">⚙️ Configurar IA</div>
+          <div class="sidebar-item">📈 Estadísticas</div>
+          <div class="sidebar-item">💳 Mi plan</div>
+          <div class="sidebar-item">❓ Ayuda</div>
+        </div>
+        <div class="dashboard-main">
+          <div class="dash-title">Dashboard</div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-label">Mensajes hoy</div>
+              <div class="stat-value blue">47</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Esta semana</div>
+              <div class="stat-value">312</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Tasa de respuesta</div>
+              <div class="stat-value green">98%</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Estado IA</div>
+              <div class="stat-value" style="font-size:1rem;color:var(--green);">✅ Activa</div>
+            </div>
+          </div>
+          <div class="chart-area">
+            <div class="chart-label">Mensajes últimos 7 días</div>
+            <div class="chart-bars">
+              <div class="bar" style="height:55%"><span class="bar-label">L</span></div>
+              <div class="bar" style="height:70%"><span class="bar-label">M</span></div>
+              <div class="bar" style="height:45%"><span class="bar-label">X</span></div>
+              <div class="bar" style="height:80%"><span class="bar-label">J</span></div>
+              <div class="bar" style="height:60%"><span class="bar-label">V</span></div>
+              <div class="bar" style="height:35%"><span class="bar-label">S</span></div>
+              <div class="bar highlight" style="height:90%"><span class="bar-label">D</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="container">
+    <div>
+      <div class="strip-stat-num">78%</div>
+      <div class="strip-stat-label">de los clientes compran al primero que responde</div>
+    </div>
+    <div>
+      <div class="strip-stat-num">5 min</div>
+      <div class="strip-stat-label">es el tiempo máximo que esperan una respuesta</div>
+    </div>
+    <div>
+      <div class="strip-stat-num">60%</div>
+      <div class="strip-stat-label">de los mensajes llegan fuera del horario comercial</div>
+    </div>
+  </div>
+</div>
+
+<!-- BENEFITS -->
+<section>
+  <div class="container">
+    <div class="center">
+      <div class="section-label">Beneficios</div>
+      <h2 class="section-title">Todo lo que necesitas para no perder ni un cliente</h2>
+      <p class="section-sub">Una inteligencia artificial que conoce tu negocio y responde como tú lo harías.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">🤖</div>
+        <h3>Respuestas automáticas inteligentes</h3>
+        <p>La IA entiende lo que preguntan y responde con naturalidad. No son respuestas robóticas: son conversaciones reales.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⏰</div>
+        <h3>Disponible 24 horas, 7 días</h3>
+        <p>De madrugada, en festivos, mientras duermes. Tus clientes siempre reciben atención inmediata.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⚡</div>
+        <h3>Configuración en 5 minutos</h3>
+        <p>Conecta tu WhatsApp, añade la info de tu negocio y listo. Sin programación. Sin complicaciones.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📈</div>
+        <h3>Aumenta tus ventas</h3>
+        <p>Responde más rápido que tu competencia. Convierte consultas en clientes. Mide tu crecimiento en tiempo real.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">💬</div>
+        <h3>Personalizado para tu negocio</h3>
+        <p>La IA aprende tus servicios, horarios y precios. Responde exactamente como tú quieres.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📊</div>
+        <h3>Estadísticas en tiempo real</h3>
+        <p>Mide cuántos mensajes recibes, qué preguntan más y cómo está funcionando tu asistente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="steps-section" id="como-funciona">
+  <div class="container">
+    <div class="center">
+      <div class="section-label">Proceso</div>
+      <h2 class="section-title">Actívalo en 3 simples pasos</h2>
+      <p class="section-sub">En menos de 10 minutos tu asistente de IA estará respondiendo por ti.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Conecta tu WhatsApp</h3>
+        <p>Vincula tu número de WhatsApp Business en menos de 2 minutos. Proceso guiado y 100% seguro.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Configura tu negocio</h3>
+        <p>Añade nombre, horarios, servicios, precios y preguntas frecuentes. Cuanta más información, mejores respuestas.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>La IA responde por ti</h3>
+        <p>A partir de ahora, cada mensaje recibe respuesta automática. Tú revisas las conversaciones cuando quieras.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem">
+      <a href="#" class="btn btn-primary btn-lg">Configurar mi asistente →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section>
+  <div class="container">
+    <div class="center">
+      <div class="section-label">Para quién es</div>
+      <h2 class="section-title">Diseñado para negocios como el tuyo</h2>
+    </div>
+    <div class="whom-grid">
+      <div class="whom-card">
+        <div class="whom-emoji">💇</div>
+        <div>
+          <h3>Peluquerías y centros de estética</h3>
+          <p>Gestiona citas y responde sobre servicios y precios.</p>
+        </div>
+      </div>
+      <div class="whom-card">
+        <div class="whom-emoji">🔧</div>
+        <div>
+          <h3>Talleres mecánicos</h3>
+          <p>Informa de disponibilidad y presupuestos.</p>
+        </div>
+      </div>
+      <div class="whom-card">
+        <div class="whom-emoji">🍽️</div>
+        <div>
+          <h3>Restaurantes y bares</h3>
+          <p>Reservas, menú del día y horarios.</p>
+        </div>
+      </div>
+      <div class="whom-card">
+        <div class="whom-emoji">🛍️</div>
+        <div>
+          <h3>Tiendas y comercios</h3>
+          <p>Stock, precios y horarios de apertura.</p>
+        </div>
+      </div>
+      <div class="whom-card">
+        <div class="whom-emoji">👤</div>
+        <div>
+          <h3>Autónomos y freelancers</h3>
+          <p>Atiende consultas mientras trabajas en otros proyectos.</p>
+        </div>
+      </div>
+      <div class="whom-card">
+        <div class="whom-emoji">🏥</div>
+        <div>
+          <h3>Clínicas y consultas</h3>
+          <p>Gestión de citas y respuestas a dudas frecuentes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="precios">
+  <div class="container">
+    <div class="center">
+      <div class="section-label">Precios</div>
+      <h2 class="section-title">Elige el plan que mejor se adapte</h2>
+      <p class="section-sub">Todos los planes incluyen 14 días de prueba gratis. Sin compromiso.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="plan-card">
+        <div class="plan-name">Básico</div>
+        <div class="plan-price"><sup>€</sup>9,99</div>
+        <div class="plan-period">al mes · IVA incluido</div>
+        <div class="plan-desc">Ideal para autónomos y pequeños negocios</div>
+        <ul class="plan-features">
+          <li>500 mensajes/mes</li>
+          <li>1 número de WhatsApp</li>
+          <li>Respuestas automáticas 24/7</li>
+          <li>Configuración básica de negocio</li>
+          <li>Panel de mensajes</li>
+          <li>Soporte por email</li>
+        </ul>
+        <a href="#" class="plan-cta">Empezar prueba gratis</a>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">⭐ Más popular</div>
+        <div class="plan-name">Profesional</div>
+        <div class="plan-price"><sup>€</sup>29,99</div>
+        <div class="plan-period">al mes · IVA incluido</div>
+        <div class="plan-desc">Para negocios en crecimiento que quieren más</div>
+        <ul class="plan-features">
+          <li>2.000 mensajes/mes</li>
+          <li>1 número de WhatsApp</li>
+          <li>Todo lo del plan Básico</li>
+          <li>Respuestas personalizadas avanzadas</li>
+          <li>Estadísticas detalladas</li>
+          <li>Integración con calendario</li>
+          <li>Soporte prioritario</li>
+        </ul>
+        <a href="#" class="plan-cta">Empezar prueba gratis</a>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Empresa</div>
+        <div class="plan-price"><sup>€</sup>59,99</div>
+        <div class="plan-period">al mes · IVA incluido</div>
+        <div class="plan-desc">Para negocios con alto volumen de mensajes</div>
+        <ul class="plan-features">
+          <li>Mensajes ilimitados</li>
+          <li>Hasta 3 números de WhatsApp</li>
+          <li>Todo lo del plan Profesional</li>
+          <li>API para integraciones</li>
+          <li>Múltiples usuarios</li>
+          <li>Gestor de cuenta dedicado</li>
+          <li>Onboarding personalizado</li>
+        </ul>
+        <a href="#" class="plan-cta">Contactar con ventas</a>
+      </div>
+
+    </div>
+    <p style="text-align:center;color:var(--text-light);font-size:0.85rem;margin-top:2rem;">Facturación mensual o anual (2 meses gratis). ¿Necesitas un plan a medida? <a href="#contacto" style="color:var(--blue);text-decoration:none;">Contáctanos.</a></p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="center">
+      <div class="section-label">Testimonios</div>
+      <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Antes perdía clientes porque no podía responder a tiempo. Ahora RespondeYA contesta mientras atiendo en el salón. Mis reservas han aumentado un 40%."</p>
+        <div class="testimonial-author">
+          <div class="author-name">María González</div>
+          <div class="author-biz">Peluquería Estilos, Madrid</div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Configurarlo fue facilísimo. En 10 minutos ya estaba funcionando. Mis clientes ni notan que es una IA. Es como tener un empleado más siempre disponible."</p>
+        <div class="testimonial-author">
+          <div class="author-name">Carlos Ruiz</div>
+          <div class="author-biz">Taller Ruiz Hermanos, Sevilla</div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"El plan Profesional nos ha permitido gestionar todas las reservas del restaurante sin contratar a nadie más. La inversión se recupera en días."</p>
+        <div class="testimonial-author">
+          <div class="author-name">Laura Martínez</div>
+          <div class="author-biz">Restaurante El Rincón, Barcelona</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="center">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Preguntas frecuentes</h2>
+    </div>
+    <div class="faq-grid" style="margin-top:3rem">
+      <div class="faq-item">
+        <div class="faq-q">¿Necesito WhatsApp Business? <span class="arrow">+</span></div>
+        <div class="faq-a">Sí, RespondeYA funciona con WhatsApp Business API. Te guiamos en todo el proceso de configuración paso a paso.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿La IA responde como un robot? <span class="arrow">+</span></div>
+        <div class="faq-a">No. La IA genera respuestas naturales y personalizadas basándose en la información de tu negocio. Tus clientes tendrán conversaciones fluidas.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Puedo intervenir en las conversaciones? <span class="arrow">+</span></div>
+        <div class="faq-a">Por supuesto. Puedes ver todos los mensajes en tiempo real y tomar el control de cualquier conversación cuando quieras.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Qué pasa si supero los mensajes del plan? <span class="arrow">+</span></div>
+        <div class="faq-a">Te avisamos antes de llegar al límite. Puedes subir de plan en cualquier momento o comprar mensajes adicionales sin interrupciones.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Puedo cancelar cuando quiera? <span class="arrow">+</span></div>
+        <div class="faq-a">Sí, sin permanencia ni penalizaciones. Cancela desde tu panel con un clic. La cancelación es efectiva al final del período pagado.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Mis datos están seguros? <span class="arrow">+</span></div>
+        <div class="faq-a">Absolutamente. Cumplimos con el RGPD y todos los datos se almacenan en servidores europeos con cifrado SSL/TLS.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Ofrecéis soporte en español? <span class="arrow">+</span></div>
+        <div class="faq-a">Sí, todo nuestro equipo está en España y el soporte es 100% en español. Atención de lunes a viernes de 9:00 a 18:00.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Funciona con mi número actual de WhatsApp? <span class="arrow">+</span></div>
+        <div class="faq-a">Si ya tienes WhatsApp Business puedes conectarlo directamente. Si usas WhatsApp personal, te ayudamos a migrar sin perder tus chats.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
+      <div>
+        <div class="section-label">Contacto</div>
+        <h2 class="section-title">¿Tienes dudas? Escríbenos</h2>
+        <p class="section-sub">Nuestro equipo responde en menos de 24 horas. Sí, personas reales. En español.</p>
+        <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1rem">
+          <div style="display:flex;align-items:center;gap:0.75rem;color:var(--text-mid);font-size:0.95rem">
+            <span style="font-size:1.2rem">📧</span> hola@respondeya.es
+          </div>
+          <div style="display:flex;align-items:center;gap:0.75rem;color:var(--text-mid);font-size:0.95rem">
+            <span style="font-size:1.2rem">📍</span> Madrid, España
+          </div>
+          <div style="display:flex;align-items:center;gap:0.75rem;color:var(--text-mid);font-size:0.95rem">
+            <span style="font-size:1.2rem">🕐</span> L–V 9:00 – 18:00
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--r-lg);padding:2rem">
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:500;margin-bottom:0.4rem;color:var(--text-mid)">Nombre *</label>
+            <input type="text" placeholder="Tu nombre" style="width:100%;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='#2563EB'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:500;margin-bottom:0.4rem;color:var(--text-mid)">Email *</label>
+            <input type="email" placeholder="tu@email.com" style="width:100%;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='#2563EB'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:500;margin-bottom:0.4rem;color:var(--text-mid)">Asunto</label>
+            <select style="width:100%;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;background:white">
+              <option>Información general</option>
+              <option>Soporte técnico</option>
+              <option>Ventas</option>
+              <option>Facturación</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;font-size:0.85rem;font-weight:500;margin-bottom:0.4rem;color:var(--text-mid)">Mensaje *</label>
+            <textarea rows="4" placeholder="Cuéntanos en qué podemos ayudarte..." style="width:100%;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;resize:vertical;transition:border-color 0.2s" onfocus="this.style.borderColor='#2563EB'" onblur="this.style.borderColor='var(--border)'"></textarea>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:0.6rem;font-size:0.82rem;color:var(--text-mid)">
+            <input type="checkbox" id="privacy" style="margin-top:2px;accent-color:var(--blue)">
+            <label for="privacy">Acepto la <a href="/politica-privacidad" style="color:var(--blue)">política de privacidad</a></label>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center">Enviar mensaje</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>¿Listo para no perder<br>ni un cliente más?</h2>
+  <p>Únete a más de 500 negocios que ya responden 24/7 con RespondeYA. Prueba gratis durante 14 días, sin tarjeta de crédito.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn btn-white btn-lg">Empezar mi prueba gratis →</a>
+    <a href="#precios" class="btn btn-outline-white btn-lg">Ver planes</a>
+  </div>
+  <p class="cta-note">Configuración en 5 minutos · Cancelación inmediata · Soporte incluido</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-logo">Responde<span>YA</span></div>
+        <p class="footer-desc">Tu asistente de WhatsApp con inteligencia artificial. Disponible 24/7 para que no pierdas ninguna venta.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Producto</h4>
+        <ul>
+          <li><a href="#">Cómo funciona</a></li>
+          <li><a href="#">Precios</a></li>
+          <li><a href="#">Integraciones</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#">Sobre nosotros</a></li>
+          <li><a href="#">Contacto</a></li>
+          <li><a href="#">Afiliados</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Aviso legal</a></li>
+          <li><a href="#">Política de privacidad</a></li>
+          <li><a href="#">Términos y condiciones</a></li>
+          <li><a href="#">Política de cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 RespondeYA. Todos los derechos reservados.</span>
+      <span>Hecho con ❤️ en España · hola@respondeya.es</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+
+</body>
+</html>
